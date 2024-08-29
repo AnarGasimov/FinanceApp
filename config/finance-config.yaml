@@ -1,7 +1,7 @@
 # config/config.yaml
 
 database:
-  base_url: "postgres://localhost:5432/"
-  sslmode: "disable"
+  base_url: "@localhost:5432/"
+  driver: "postgresql"
   max_conns: 10
   min_conns: 1

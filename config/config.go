@@ -12,10 +12,11 @@ type Config struct {
 }
 
 type DatabaseConfig struct {
-	BaseUrl   string `mapstructure:"baseurl"`
-	URL       string `mapstructure:"-"`
+	BaseUrl   string `mapstructure:"base_url"`
+	Driver    string `mapstructure:"driver"`
 	MaxConns  int    `mapstructure:"max_conns"`
 	MinConns  int    `mapstructure:"min_conns"`
+	URL       string `mapstructure:"-"`
 	User      string `mapstructure:"-"`
 	Password  string `mapstructure:"-"`
 	Name      string `mapstructure:"-"`
@@ -23,9 +24,20 @@ type DatabaseConfig struct {
 }
 
 func LoadConfig() (*Config, error) {
+	configPaths := []string{
+		".",                      // current directory
+		"..",                     // parent directory
+		"../..",                  // two levels up
+		os.Getenv("CONFIG_PATH"), // environment variable to specify path
+	}
+
 	viper.SetConfigName("finance-config")
 	viper.SetConfigType("yaml")
-	viper.AddConfigPath("./config")
+
+	for _, path := range configPaths {
+		viper.AddConfigPath(path) // adds each path to the search list
+	}
+
 	viper.AutomaticEnv()
 
 	if err := viper.ReadInConfig(); err != nil {
@@ -38,16 +50,17 @@ func LoadConfig() (*Config, error) {
 		return nil, err
 	}
 
-	config.Database.User = os.Getenv("POSTGRES_USER")
-	config.Database.Password = os.Getenv("POSTGRES_PASSWORD")
-	config.Database.Name = os.Getenv("POSTGRES_DB")
-	config.Database.Container = os.Getenv("POSTGRES_CONTAINER")
+	db := config.Database
+	db.User = os.Getenv("POSTGRES_USER")
+	db.Password = os.Getenv("POSTGRES_PASSWORD")
+	db.Name = os.Getenv("POSTGRES_DB")
+	db.Container = os.Getenv("POSTGRES_CONTAINER")
 
-	if config.Database.User == "" || config.Database.Password == "" || config.Database.Name == "" || config.Database.Container == "" {
+	if db.User == "" || db.Password == "" || db.Name == "" || db.Container == "" {
 		log.Fatal("Database credentials and settings are not fully set in environment variables")
 	}
 
-	config.Database.URL = fmt.Sprintf("%s%s?sslmode=disable", config.Database.BaseUrl, config.Database.Name)
+	config.Database.URL = fmt.Sprintf("%s://%s:%s%s%s?sslmode=disable", db.Driver, db.User, db.Password, db.BaseUrl, db.Name)
 
 	return &config, nil
 }
