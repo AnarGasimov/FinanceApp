@@ -1,1 +1,6 @@
 /sqlc_trace.log
+# IDEs
+.idea
+.vscode
+
+.env
