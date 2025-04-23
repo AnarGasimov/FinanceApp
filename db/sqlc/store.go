@@ -21,8 +21,8 @@ type TransferTxParams struct {
 // TransferTxResult is a result of transfer transaction
 type TransferTxResult struct {
 	Transfer    Transfer `json:"transfer"`
-	FromAccount Account  `json:"to_account_id"`
-	ToAccount   Account  `json:"amount"`
+	FromAccount Account  `json:"from_account_id"`
+	ToAccount   Account  `json:"to_account"`
 	FromEntry   Entry    `json:"from_entry"`
 	ToEntry     Entry    `json:"to_entry"`
 }
@@ -37,7 +37,7 @@ func NewStore(db *sql.DB) *Store {
 
 // execTc executes a function within a database transaction
 func (store *Store) execTx(ctx context.Context, fn func(*Queries) error) error {
-	tx, err := store.db.BeginTx(ctx, nil)
+	tx, err := store.db.BeginTx(ctx, nil) // I have passed nil because to leave default value of Isolation level
 	if err != nil {
 		return err
 	}
@@ -81,9 +81,32 @@ func (store *Store) TransferTx(ctx context.Context, arg TransferTxParams) (Trans
 		if err != nil {
 			return err
 		}
-		//TODO Update Accounts balance
+		//TODO Update Account's balance
+
+		if arg.FromAccountId < arg.ToAccountId {
+			result.FromAccount, result.ToAccount, err = addMoney(ctx,queries, arg.FromAccountId, -arg.Amount,arg.ToAccountId, arg.Amount)
+		}else{
+			result.ToAccount, result.FromAccount, err = addMoney(ctx,queries, arg.ToAccountId, arg.Amount,arg.FromAccountId, -arg.Amount)
+		}
 		return nil
+
 	})
 
 	return result, err
+}
+
+func addMoney(ctx context.Context, q *Queries, accountId1 int64, amount1 int64, accountId2 int64, amount2 int64) (account1 Account,account2 Account, err error){
+	account1, err = q.AddAccountBalance(ctx,AddAccountBalanceParams{
+		ID: accountId1,
+		Amount: amount1,
+	})
+	if err != nil {
+		return
+	}
+	account2, err = q.AddAccountBalance(ctx,AddAccountBalanceParams{
+		ID: accountId2,
+		Amount: amount2,
+	})
+
+	return
 }
