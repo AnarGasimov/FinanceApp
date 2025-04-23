@@ -15,9 +15,9 @@ jobs:
       postgres:
         image: postgres
         env:
-          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
-          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB: finance
+          POSTGRES_USER: root
+          POSTGRES_PASSWORD: secret
         ports:
           - 5432:5432
         options: >-
@@ -38,14 +38,6 @@ jobs:
         curl -L https://github.com/golang-migrate/migrate/releases/download/v4.18.2/migrate.linux-amd64.tar.gz | tar xvz
         sudo mv migrate /usr/bin/migrate
         which migrate
-    - name: Set DNS
-      run: echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf
-    - name: Debug POSTGRES_HOST
-      run: echo "POSTGRES_HOST is $POSTGRES_HOST"
-    - name: Test Postgres Connection
-      run: psql -h postgres -U ${{ secrets.POSTGRES_USER }} -d ${{ secrets.POSTGRES_DB }} -c "SELECT 1"
-      env:
-        PGPASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
     - name: Run migrations
       run: make migrateup
       env:
