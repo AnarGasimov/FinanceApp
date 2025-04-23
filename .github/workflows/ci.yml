@@ -1,4 +1,3 @@
-
 name: Go
 
 on:
@@ -8,22 +7,17 @@ on:
     branches: [ "development" ]
 
 jobs:
-
   test:
     name: Test
     runs-on: ubuntu-latest
     
     services:
       postgres:
-        # Docker Hub image
         image: postgres
-        # Provide the password for postgres
         env:
-          POSTGRES_CONTAINER: ${{ secrets.POSTGRES_CONTAINER }}
           POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
           POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
           POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-        # Set health checks to wait until postgres has started
         ports:
           - 5432:5432
         options: >-
@@ -39,16 +33,22 @@ jobs:
       with:
         go-version: '1.23.0'
       id: go
-
-    - name: installing golang migrate
+    - name: Install golang-migrate
       run: |
         curl -L https://github.com/golang-migrate/migrate/releases/download/v4.18.2/migrate.linux-amd64.tar.gz | tar xvz
-        ls -l
         sudo mv migrate /usr/bin/migrate
         which migrate
-    - name: Run migrations
-      run: make migrateup     
+    - name: Set DNS
+      run: echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf
+    - name: Debug POSTGRES_HOST
+      run: echo "POSTGRES_HOST is $POSTGRES_HOST"
+    - name: Test Postgres Connection
+      run: psql -h postgres -U ${{ secrets.POSTGRES_USER }} -d ${{ secrets.POSTGRES_DB }} -c "SELECT 1"
       env:
-       POSTGRES_HOST: postgres
+        PGPASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+    - name: Run migrations
+      run: make migrateup
+      env:
+        POSTGRES_HOST: postgres
     - name: Test
-      run: make test  
+      run: make test
