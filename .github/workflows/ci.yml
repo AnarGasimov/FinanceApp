@@ -17,7 +17,7 @@ jobs:
         env:
           POSTGRES_DB: finance
           POSTGRES_USER: root
-          POSTGRES_PASSWORD: secret
+          POSTGRES_PASSWORD: postgres
         ports:
           - 5432:5432
         options: >-
