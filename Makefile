@@ -10,10 +10,10 @@ dropdb:
 	docker exec -it $(POSTGRES_CONTAINER) dropdb $(POSTGRES_DB)
 
 migrateup:
-	migrate -path db/migration -database "postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@postgres:5432/$(POSTGRES_DB)?sslmode=disable" -verbose up
+	migrate -path db/migration -database "postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@$(POSTGRES_HOST):5432/$(POSTGRES_DB)?sslmode=disable" -verbose up
 
 migratedown:
-	migrate -path db/migration -database "postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@postgres:5432/$(POSTGRES_DB)?sslmode=disable" -verbose down
+	migrate -path db/migration -database "postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@$(POSTGRES_HOST):5432/$(POSTGRES_DB)?sslmode=disable" -verbose down
 
 sqlc:
 	sqlc generate
