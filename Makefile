@@ -1,19 +1,19 @@
 # Makefile
 postgres:
-	docker run --name $(POSTGRES_CONTAINER) -p 5432:5432 -e POSTGRES_USER=$(POSTGRES_USER) -e POSTGRES_PASSWORD=$(POSTGRES_PASSWORD) -d postgres
+	docker run --name postgres12 -p 5432:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=secret -d postgres
 
 createdb:
-	docker exec -it $(POSTGRES_CONTAINER) createdb --username=$(POSTGRES_USER) --owner=$(POSTGRES_USER) $(POSTGRES_DB)
+	docker exec -it postgres12 createdb --username=root --owner=root finance
 
 dropdb:
-	docker exec -it $(POSTGRES_CONTAINER) psql -U $(POSTGRES_USER) -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '$(POSTGRES_DB)' AND pid <> pg_backend_pid();"
-	docker exec -it $(POSTGRES_CONTAINER) dropdb $(POSTGRES_DB)
+	docker exec -it postgres12 psql -U root -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = 'finance' AND pid <> pg_backend_pid();"
+	docker exec -it postgres12 dropdb finance
 
 migrateup:
-	migrate -path db/migration -database "postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@$(POSTGRES_HOST):5432/$(POSTGRES_DB)?sslmode=disable" -verbose up
+	migrate -path db/migration -database "postgres://root:postgres@localhost:5432/finance?sslmode=disable" -verbose up
 
 migratedown:
-	migrate -path db/migration -database "postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@$(POSTGRES_HOST):5432/$(POSTGRES_DB)?sslmode=disable" -verbose down
+	migrate -path db/migration -database "postgres://root:postgres@localhost:5432/finance?sslmode=disable" -verbose down
 
 sqlc:
 	sqlc generate
