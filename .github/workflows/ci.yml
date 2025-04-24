@@ -10,7 +10,9 @@ jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
-    
+    defaults:
+      run:
+        working-directory: /home/runner/work/FinanceApp
     services:
       postgres:
         image: postgres
