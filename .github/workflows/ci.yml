@@ -17,6 +17,7 @@ jobs:
           POSTGRES_DB: finance
           POSTGRES_USER: root
           POSTGRES_PASSWORD: postgres
+          POSTGRES_CONTAINER: postgres12
         ports:
           - 5432:5432
         options: >-
