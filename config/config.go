@@ -28,6 +28,7 @@ func LoadConfig() (*Config, error) {
 		".",                      // current directory
 		"..",                     // parent directory
 		"../..",                  // two levels up
+		"../../..",                  // three levels up
 		os.Getenv("CONFIG_PATH"), // environment variable to specify path
 	}
 
