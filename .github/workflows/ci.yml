@@ -28,7 +28,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
       with:
-       path: FinanceApp
+       path: ./FinanceApp
     - name: Check Directory Structure
       run: ls -R 
     - name: Check make
