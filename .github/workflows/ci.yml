@@ -46,3 +46,8 @@ jobs:
       run: make migrateup
     - name: Test
       run: make test
+      env:
+        POSTGRES_USER: root
+        POSTGRES_PASSWORD: postgres
+        POSTGRES_DB: finance
+        POSTGRES_CONTAINER: postgres12
