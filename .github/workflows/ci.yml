@@ -42,7 +42,5 @@ jobs:
         which migrate
     - name: Run migrations
       run: make migrateup
-      env:
-        POSTGRES_HOST: postgres
     - name: Test
       run: make test
