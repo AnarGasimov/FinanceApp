@@ -58,6 +58,7 @@ func LoadConfig() (*Config, error) {
 	db.Container = os.Getenv("POSTGRES_CONTAINER")
 
 	if db.User == "" || db.Password == "" || db.Name == "" || db.Container == "" {
+		log.Fatalf("user: %s  password: %s db.name: %s db.container: %s", db.User, db.Password, db.Name, db.Container)
 		log.Fatal("Database credentials and settings are not fully set in environment variables")
 	}
 
