@@ -10,9 +10,6 @@ jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
-    defaults:
-      run: 
-        working-directory: /home/runner/work/FinanceApp
     services:
       postgres:
         image: postgres
@@ -33,10 +30,9 @@ jobs:
       with:
        path: FinanceApp
     - name: Check Directory Structure
-      run: ls -R   
+      run: ls -R 
     - name: Check make
       run: ls -la 
-      working-directory: /home/runner/work/FinanceApp
     - name: Set up Go
       uses: actions/setup-go@v4
       with:
@@ -49,6 +45,5 @@ jobs:
         which migrate
     - name: Run migrations
       run: make migrateup
-      working-directory: /home/runner/work/FinanceApp
     - name: Test
       run: make test
