@@ -28,7 +28,7 @@ func LoadConfig() (*Config, error) {
 		".",                      // current directory
 		"..",                     // parent directory
 		"../..",                  // two levels up
-		"./FinanceApp/config",		
+		"/home/runner/work/FinanceApp/FinanceApp/config",		
 		os.Getenv("CONFIG_PATH"), // environment variable to specify path
 	}
 
