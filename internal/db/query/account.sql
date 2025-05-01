@@ -1,10 +1,12 @@
 -- name: CreateAccount :one
 INSERT INTO accounts (
+   number,
+   email,
    owner,
    balance,
    currency
 ) VALUES (
-   $1,$2,$3
+   $1,$2,$3,$4,$5
 ) RETURNING *;
 
 -- name: GetAccountForUpdate :one

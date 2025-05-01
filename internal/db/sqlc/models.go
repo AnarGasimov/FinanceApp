@@ -11,6 +11,8 @@ import (
 
 type Account struct {
 	ID        int64     `json:"id"`
+	Email     string    `json:"email"`
+	Number    string    `json:"number"`
 	Owner     string    `json:"owner"`
 	Balance   int64     `json:"balance"`
 	Currency  string    `json:"currency"`

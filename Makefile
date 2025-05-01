@@ -10,10 +10,10 @@ dropdb:
 	docker exec -it postgres12 dropdb finance
 
 migrateup:
-	migrate -path db/migration -database "postgres://root:postgres@localhost:5432/finance?sslmode=disable" -verbose up
+	migrate -path internal/db/migration -database "postgres://root:postgres@localhost:5432/finance?sslmode=disable" -verbose up
 
 migratedown:
-	migrate -path db/migration -database "postgres://root:postgres@localhost:5432/finance?sslmode=disable" -verbose down
+	migrate -path internal/db/migration -database "postgres://root:postgres@localhost:5432/finance?sslmode=disable" -verbose down
 
 sqlc:
 	sqlc generate

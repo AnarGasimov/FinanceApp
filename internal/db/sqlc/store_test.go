@@ -125,11 +125,11 @@ func TestTransferTxDeadLock(t *testing.T) {
 	errs := make(chan error)
 
 	// run n concurrent transfer transaction
-	for i:=range n {
+	for i := range n {
 		fromAccountID := account1.ID
 		toAccountID := account2.ID
 
-		if i % 2==1 {
+		if i%2 == 1 {
 			fromAccountID = account2.ID
 			toAccountID = account1.ID
 		}

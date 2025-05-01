@@ -1,5 +1,7 @@
 CREATE TABLE "accounts" (
                            "id" bigserial PRIMARY KEY,
+                           "email" varchar(255) UNIQUE NOT NULL,
+                           "number" varchar(20) UNIQUE NOT NULL,
                            "owner" varchar NOT NULL,
                            "balance" bigint NOT NULL,
                            "currency" varchar NOT NULL,

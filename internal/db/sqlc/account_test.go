@@ -1,7 +1,7 @@
 package db
 
 import (
-	"FinanceApp/db/util"
+	"FinanceApp/internal/db/util"
 	"context"
 	"github.com/stretchr/testify/require"
 	"testing"
@@ -15,7 +15,7 @@ func createRandomAccount(t *testing.T) Account {
 		Balance:  util.RandomMoney(),
 		Currency: util.RandomCurrency(),
 	}
-	
+
 	account, err := testQueries.CreateAccount(context.Background(), arg)
 	require.NoError(t, err)
 	require.NotEmpty(t, account)

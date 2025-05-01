@@ -25,10 +25,10 @@ type DatabaseConfig struct {
 
 func LoadConfig() (*Config, error) {
 	configPaths := []string{
-		".",                      // current directory
-		"..",                     // parent directory
-		"../..",                  // two levels up
-		"/home/runner/work/FinanceApp/FinanceApp/config",		
+		".",     // current directory
+		"..",    // parent directory
+		"../..", // two levels up
+		"/home/runner/work/FinanceApp/FinanceApp/config",
 		os.Getenv("CONFIG_PATH"), // environment variable to specify path
 	}
 
@@ -61,7 +61,7 @@ func LoadConfig() (*Config, error) {
 		log.Fatalf("user: %s  password: %s db.name: %s db.container: %s", db.User, db.Password, db.Name, db.Container)
 		log.Fatal("Database credentials and settings are not fully set in environment variables")
 	}
-	
+
 	config.Database.URL = fmt.Sprintf("%s://%s:%s%s%s?sslmode=disable", db.Driver, db.User, db.Password, db.BaseUrl, db.Name)
 
 	return &config, nil
