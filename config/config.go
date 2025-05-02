@@ -9,6 +9,7 @@ import (
 
 type Config struct {
 	Database DatabaseConfig `mapstructure:"database"`
+	Server   ServerConfig   `mapstructure:"server"`
 }
 
 type DatabaseConfig struct {
@@ -21,6 +22,12 @@ type DatabaseConfig struct {
 	Password  string `mapstructure:"-"`
 	Name      string `mapstructure:"-"`
 	Container string `mapstructure:"-"`
+}
+type ServerConfig struct {
+	Address      string `mapstructure:"address"`
+	ReadTimeout  string `mapstructure:"read_timeout"`
+	WriteTimeout string `mapstructure:"write_timeout"`
+	IdleTimeout  string `mapstructure:"idle_timeout"`
 }
 
 func LoadConfig() (*Config, error) {

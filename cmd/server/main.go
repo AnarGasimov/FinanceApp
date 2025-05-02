@@ -1,33 +1,36 @@
 package main
 
 import (
-//	"fmt"
-
-// "github.com/gin-gonic/gin"
+	"FinanceApp/config"
+	hlr "FinanceApp/internal/account/handler"
+	svc "FinanceApp/internal/account/services"
+	db "FinanceApp/internal/db/sqlc"
+	"database/sql"
+	"github.com/gin-gonic/gin"
+	_ "github.com/lib/pq"
+	"log"
 )
 
 func main() {
-	//  route := gin.Default()
+	conf, err := config.LoadConfig()
+	if err != nil {
+		log.Fatalf("Error occurred while loading config: %v\n", err)
+	}
+	router := gin.Default()
 
-	// api := route.Group("/api/v1")
-	// {
-	// 	api.Handlers("accounts",)
-	// }
+	sqlDB, err := sql.Open(conf.Database.Driver, conf.Database.URL)
 
-	// router := gin.Default()
+	if err != nil {
+		log.Fatalf("Occured an error with connection to DB %v\n", err)
+	}
 
-	// // Add global middleware if needed (e.g., CORS, custom logging)
-	// // router.Use(middleware.CORSMiddleware())
+	dbStore := db.NewStore(sqlDB)
 
-	// // 3. Setup Routing
-	// // Group routes, e.g., by version
-	// apiV1 := router.Group("/api/v1")
-	// {
-	// 	// Register routes for the user resource using the handler
-	// 	userHandler.RegisterUserRoutes(apiV1)
+	accountService := svc.NewAccountServiceImp(dbStore)
+	accountHandler := hlr.NewAccountHandler(accountService)
+	accountHandler.RegisterAccountRoutes(&router.RouterGroup)
 
-	// 	// Register other resource routes here...
-	// 	// productHandler.RegisterProductRoutes(apiV1)
-	// }
-
+	if err := router.Run(conf.Server.Address); err != nil {
+		log.Fatalf("Error occured while starting the server: %v\n", err)
+	}
 }

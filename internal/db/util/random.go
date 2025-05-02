@@ -53,9 +53,9 @@ func RandomEmail() string {
 	return fmt.Sprintf("%s@email.com", RandomString(6))
 }
 
-// Generates a random Azerb phone number 
+// Generates a random Azerb phone number
 func GenerateRandomPhoneNumber() string {
-	prefixes := []string {"050","051","055","070","077"}
+	prefixes := []string{"050", "051", "055", "070", "077"}
 	prefix := prefixes[rand.Intn(len(prefixes))]
-    return fmt.Sprintf("%s%07d", prefix, rand.Intn(10000000))
+	return fmt.Sprintf("%s%07d", prefix, rand.Intn(10000000))
 }

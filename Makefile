@@ -19,4 +19,6 @@ sqlc:
 	sqlc generate
 test:
 	go test -v -cover ./...
-.PHONY: postgres createdb dropdb migrateup migratedown sqlc test
+run:
+	go run ./cmd/server/main.go	
+.PHONY: postgres createdb dropdb migrateup migratedown sqlc test run 

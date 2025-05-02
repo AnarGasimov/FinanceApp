@@ -1,1 +1,0 @@
-ALTER TABLE accounts ALTER COLUMN email SET NOT NULL;

@@ -2,6 +2,12 @@
 
 database:
   base_url: "@localhost:5432/"
-  driver: "postgresql"
+  driver: "postgres"
   max_conns: 10
   min_conns: 1
+
+server:
+  address: ":8080"       
+  read_timeout: 10s      
+  write_timeout: 10s     
+  idle_timeout: 30s
